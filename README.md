@@ -16,4 +16,21 @@ WebMagic:【Java爬虫】网络爬虫 HttpClient Jsoup WebMagic
 Vue+Echarts:电商平台数据可视化实时监控系统-Echarts-vue项目综合练习-pink老师推荐(持续更新)素材已经更新
 ****
 ## 界面展示
-
+### 数据爬取
+![数据爬取](https://github.com/Uluoyu/58rent-crawler/blob/master/images/1.png)  
+![数据插入数据库](https://github.com/Uluoyu/58rent-crawler/blob/master/images/2.png)
+### 房屋数据分析主界面
+![房屋数据分析](https://github.com/Uluoyu/58rent-crawler/blob/master/images/3.png)
+![主题切换](https://github.com/Uluoyu/58rent-crawler/blob/master/images/4.png)
+### 各区域租房平均单价数据统计
+![各区域租房平均单价](https://github.com/Uluoyu/58rent-crawler/blob/master/images/5.png)
+### 房屋地区数据统计
+![房屋地区数据分析](https://github.com/Uluoyu/58rent-crawler/blob/master/images/6.png)
+### 房屋面积与租金数据统计
+![房屋面积与租金](https://github.com/Uluoyu/58rent-crawler/blob/master/images/7.png)
+### 房屋类型数据统计
+![房屋类型数据分析](https://github.com/Uluoyu/58rent-crawler/blob/master/images/8.png)
+### 房屋租金支付方式数据统计
+![房屋租金支付方式数据分析](https://github.com/Uluoyu/58rent-crawler/blob/master/images/9.png)
+### 租房面积数据统计
+![租房面积数据分析](https://github.com/Uluoyu/58rent-crawler/blob/master/images/10.png)
