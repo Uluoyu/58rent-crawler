@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhq.analysis.mapper.HouseMapper">
+    <select id="selectAll" resultType="com.zhq.crawler.pojo.HouseInfo">
+        SELECT  `id`,  `house_title`,  `house_pay`,  `house_pay_way`,  `rent_way`,  `house_type`,  `toward_floor`,  `house_estate`,  `area`,  `address`,  LEFT(`pic`, 256),  `time`,  `agent_name`,  `house_disposal`,  `house_spot`,  LEFT(`house_desc`, 256),  LEFT(`url`, 256) FROM `rent_crawler`.`house_info` ORDER BY `house_pay_way`;
+    </select>
+    <select id="selectAnalysis" resultType="java.util.HashMap">
+        SELECT ${cate} as 'cate', count(*) as 'count' from house_info group by ${cate}
+    </select>
+    <select id="selectAnalysis2" resultType="java.util.HashMap">
+        SELECT house_area AS 'cate',house_pay AS 'count' FROM house_info  GROUP BY house_area
+    </select>
+    <select id="selectAnalysis3" resultType="java.util.HashMap">
+        SELECT AREA AS 'cate',AVG(house_pay) AS 'count' FROM house_info GROUP BY AREA
+    </select>
+    <select id="selectAnalysis4" resultType="java.util.HashMap">
+        select elt(interval(house_area,0,20,40,60,80,100,120,140,160),"0-20平","20-40平","40-60平","60-80平","80-100平","100-120平","120-140平","140-160平","160平+") AS 'cate' ,count(*) AS 'count'
+        from house_info group by cate;
+    </select>
+</mapper>

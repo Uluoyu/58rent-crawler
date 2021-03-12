@@ -13,7 +13,11 @@ public class HouseInfo {
     private String housePayWay;
     private String rentWay;
     private String houseType;
-    private String towardFloor;
+    private String houseArea;
+    private String houseDecora;
+    private String toward;
+    private String floor;
+    private String floorHeight;
     private String houseEstate;
     private String area;
     private String address;
@@ -73,12 +77,44 @@ public class HouseInfo {
         this.houseType = houseType;
     }
 
-    public String getTowardFloor() {
-        return towardFloor;
+    public String getHouseArea() {
+        return houseArea;
     }
 
-    public void setTowardFloor(String towardFloor) {
-        this.towardFloor = towardFloor;
+    public void setHouseArea(String houseArea) {
+        this.houseArea = houseArea;
+    }
+
+    public String getHouseDecora() {
+        return houseDecora;
+    }
+
+    public void setHouseDecora(String houseDecora) {
+        this.houseDecora = houseDecora;
+    }
+
+    public String getToward() {
+        return toward;
+    }
+
+    public void setToward(String toward) {
+        this.toward = toward;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public String getFloorHeight() {
+        return floorHeight;
+    }
+
+    public void setFloorHeight(String floorHeight) {
+        this.floorHeight = floorHeight;
     }
 
     public String getHouseEstate() {
@@ -170,7 +206,11 @@ public class HouseInfo {
                 ", housePayWay='" + housePayWay + '\'' +
                 ", rentWay='" + rentWay + '\'' +
                 ", houseType='" + houseType + '\'' +
-                ", towardFloor='" + towardFloor + '\'' +
+                ", houseArea='" + houseArea + '\'' +
+                ", houseDecora='" + houseDecora + '\'' +
+                ", toward='" + toward + '\'' +
+                ", floor='" + floor + '\'' +
+                ", floorHeight='" + floorHeight + '\'' +
                 ", houseEstate='" + houseEstate + '\'' +
                 ", area='" + area + '\'' +
                 ", address='" + address + '\'' +

@@ -14,7 +14,11 @@ CREATE TABLE IF NOT EXISTS `house_info` (
   `house_pay_way` varchar(30) DEFAULT NULL COMMENT '租金支付方式',
   `rent_way` varchar(30) DEFAULT NULL COMMENT '租赁方式',
   `house_type` varchar(30) DEFAULT NULL COMMENT '房屋类型',
-  `toward_floor` varchar(30) DEFAULT NULL COMMENT '房屋朝向楼层',
+  `house_area` varchar(30) DEFAULT NULL COMMENT '房屋大小',
+  `house_decora` varchar(30) DEFAULT NULL COMMENT '房屋装修',
+  `toward` varchar(30) DEFAULT NULL COMMENT '房屋朝向',
+  `floor` varchar(30) DEFAULT NULL COMMENT '房屋楼层',
+  `floor_height` varchar(30) DEFAULT NULL COMMENT '房屋高度',
   `house_estate` varchar(30) DEFAULT NULL COMMENT '所在小区',
   `area` varchar(30) DEFAULT NULL COMMENT '所属区域',
   `address` varchar(50) DEFAULT NULL COMMENT '详细地址',
@@ -26,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `house_info` (
   `house_desc` text DEFAULT NULL COMMENT '房屋描述',
   `url` varchar(1000) NOT NULL COMMENT '详情页地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2097 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1493 DEFAULT CHARSET=utf8;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

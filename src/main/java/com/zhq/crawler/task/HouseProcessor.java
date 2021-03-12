@@ -30,7 +30,7 @@ public class HouseProcessor implements PageProcessor {
     @Autowired
     private KuiDaiLiIP kuiDaiLiIP;
 
-    private String url = "https://hf.58.com/chuzu/?PGTID=0d100000-0034-5668-8ff3-c6341bf6020a&ClickID=2";
+    private String url = "https://hf.58.com/chuzu/?PGTID=0d100000-0034-58df-ad90-0088ee8cbf22&ClickID=4";
     @Override
     public void process(Page page) {
         //解析页面，获取租房信息的详情的url地址
@@ -74,8 +74,16 @@ public class HouseProcessor implements PageProcessor {
         houseInfo.setHousePay(Jsoup.parse(html.css("div.house-pay-way  span.c_ff552e").nodes().get(0).toString()).text());
         houseInfo.setHousePayWay(html.css("div.house-pay-way span.instructions","text").toString());
         houseInfo.setRentWay(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span").nodes().get(1).toString()).text());
-        houseInfo.setHouseType(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(0).toString()).text());
-        houseInfo.setTowardFloor(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(1).toString()).text());
+        String type = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(0).toString()).text();
+        String[] types = type.split(String.valueOf(' '));
+        houseInfo.setHouseType(types[0]);
+        houseInfo.setHouseArea(types[1]+types[2]);
+        houseInfo.setHouseDecora(types[3]);
+        String tf = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(1).toString()).text();
+        String[]  tfs = tf.split(String.valueOf(' '));
+        houseInfo.setToward(tfs[0]);
+        houseInfo.setFloor(tfs[1]);
+        houseInfo.setFloorHeight(tfs[3]);
         houseInfo.setHouseEstate(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(0).toString()).text());
         houseInfo.setArea(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(1).toString()).text());
         houseInfo.setAddress(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.dz").nodes().get(0).toString()).text());
