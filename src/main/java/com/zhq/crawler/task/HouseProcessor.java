@@ -1,7 +1,7 @@
 package com.zhq.crawler.task;
 
 
-import com.zhq.crawler.ip.KuiDaiLiIP;
+import com.zhq.crawler.ip.KuaiDaiLiIP;
 import com.zhq.crawler.pojo.HouseInfo;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ import java.util.List;
 
 
 @Component
-public class HouseProcessor implements PageProcessor {
+public class HouseProcessor implements PageProcessor{
 
     @Autowired
     private HouseDataPipeline houseDataPipeline;
     @Autowired
-    private KuiDaiLiIP kuiDaiLiIP;
+    private KuaiDaiLiIP kuaiDaiLiIP;
 
-    private String url = "https://hf.58.com/chuzu/?PGTID=0d100000-0034-58df-ad90-0088ee8cbf22&ClickID=4";
+    private String url = "https://hf.58.com/chuzu/?PGTID=0d100000-0034-5448-1684-b72bc1e684da&ClickID=4";
     @Override
     public void process(Page page) {
         //解析页面，获取租房信息的详情的url地址
@@ -61,49 +61,63 @@ public class HouseProcessor implements PageProcessor {
         HouseInfo houseInfo = new HouseInfo();
         //解析页面
         Html html = page.getHtml();
-        //获取照片的URL
-        List<String> picUrl = html.xpath("//div[@class='basic-pic-list']/ul/li").css("img", "src").all();
-        Iterator<String> it = picUrl.iterator();
-        String picUrls = "";
-        while (it.hasNext()){
-            String picU = it.next();
-            picUrls += picU +" ";
+        int statusCode = page.getStatusCode();
+        Selectable title = html.css("title");
+        String s = title.toString();
+        if (statusCode == 200 && !s.contains("请输入验证码") && !s.contains("请完成登录")) {
+            //获取照片的URL
+            List<String> picUrl = html.xpath("//div[@class='basic-pic-list']/ul/li").css("img", "src").all();
+            Iterator<String> it = picUrl.iterator();
+            String picUrls = "";
+            while (it.hasNext()) {
+                String picU = it.next();
+                picUrls += picU + " ";
+            }
+            //获取数据封装到对象中
+            houseInfo.setHouseTitle(html.css("div.house-title h1", "text").toString());
+            houseInfo.setHousePay(Jsoup.parse(html.css("div.house-pay-way  span.c_ff552e").nodes().get(0).toString()).text());
+            houseInfo.setHousePayWay(html.css("div.house-pay-way span.instructions", "text").toString());
+            houseInfo.setRentWay(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span").nodes().get(1).toString()).text());
+            String type = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(0).toString()).text();
+            String[] types = type.split(String.valueOf(' '));
+            houseInfo.setHouseType(types[0]);
+            houseInfo.setHouseArea(types[1] + types[2]);
+            houseInfo.setHouseDecora(types[3]);
+            String tf = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(1).toString()).text();
+            String[] tfs = tf.split(String.valueOf(' '));
+            for (int i = 0; i < tfs.length; i++) {
+                if (i == 0) {
+                    houseInfo.setToward(tfs[i]);
+                }else if ( i == 1){
+                    houseInfo.setFloor(tfs[i]);
+                }
+                if (tfs.length >= 4) {
+                    houseInfo.setFloorHeight(tfs[3]);
+                } else {
+                    houseInfo.setFloorHeight("");
+                }
+            }
+            houseInfo.setHouseEstate(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(0).toString()).text());
+            houseInfo.setArea(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(1).toString()).text());
+            houseInfo.setAddress(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.dz").nodes().get(0).toString()).text());
+            houseInfo.setPic(picUrls);
+            houseInfo.setTime(html.css("div.house-title p.house-update-info", "text").toString());
+            houseInfo.setAgentName(html.css("div.agent-info-block p.agent-name a", "text").toString());
+            String houseDis = Jsoup.parse(html.css("ul.house-disposal").nodes().toString()).text();
+            int startDis = houseDis.indexOf("[") + 1;
+            int endDis = houseDis.length() - 1;
+            String houseDisposal1 = houseDis.substring(startDis, endDis);
+            houseInfo.setHouseDisposal(houseDisposal1);
+            houseInfo.setHouseSpot(Jsoup.parse(html.css("div.house-word-introduce ul.introduce-item li span.a2").nodes().get(0).toString()).text());
+            String desc = Jsoup.parse(html.css("div.house-word-introduce ul.introduce-item li span").nodes().toString()).text();
+            int start = desc.indexOf("房源描述") + 5;
+            int end = desc.length() - 1;
+            String describe = desc.substring(start, end);
+            houseInfo.setHouseDesc(describe);
+            houseInfo.setUrl(page.getUrl().toString());
+            //把结果保存起来
+            page.putField("houseInfo", houseInfo);
         }
-        //获取数据封装到对象中
-        houseInfo.setHouseTitle(html.css("div.house-title h1","text").toString());
-        houseInfo.setHousePay(Jsoup.parse(html.css("div.house-pay-way  span.c_ff552e").nodes().get(0).toString()).text());
-        houseInfo.setHousePayWay(html.css("div.house-pay-way span.instructions","text").toString());
-        houseInfo.setRentWay(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span").nodes().get(1).toString()).text());
-        String type = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(0).toString()).text();
-        String[] types = type.split(String.valueOf(' '));
-        houseInfo.setHouseType(types[0]);
-        houseInfo.setHouseArea(types[1]+types[2]);
-        houseInfo.setHouseDecora(types[3]);
-        String tf = Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.strongbox").nodes().get(1).toString()).text();
-        String[]  tfs = tf.split(String.valueOf(' '));
-        houseInfo.setToward(tfs[0]);
-        houseInfo.setFloor(tfs[1]);
-        houseInfo.setFloorHeight(tfs[3]);
-        houseInfo.setHouseEstate(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(0).toString()).text());
-        houseInfo.setArea(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span a.ah").nodes().get(1).toString()).text());
-        houseInfo.setAddress(Jsoup.parse(html.css("div.house-desc-item ul.f14 li span.dz").nodes().get(0).toString()).text());
-        houseInfo.setPic(picUrls);
-        houseInfo.setTime(html.css("div.house-title p.house-update-info","text").toString());
-        houseInfo.setAgentName(html.css("div.agent-info-block p.agent-name a","text").toString());
-        String houseDis= Jsoup.parse(html.css("ul.house-disposal").nodes().toString()).text();
-        int startDis = houseDis.indexOf("[")+1;
-        int endDis = houseDis.length()-1;
-        String houseDisposal1 = houseDis.substring(startDis,endDis);
-        houseInfo.setHouseDisposal(houseDisposal1);
-        houseInfo.setHouseSpot(Jsoup.parse(html.css("div.house-word-introduce ul.introduce-item li span.a2").nodes().get(0).toString()).text());
-        String desc = Jsoup.parse(html.css("div.house-word-introduce ul.introduce-item li span").nodes().toString()).text();
-        int start = desc.indexOf("房源描述")+5;
-        int end = desc.length()-1;
-        String describe = desc.substring(start,end);
-        houseInfo.setHouseDesc(describe);
-        houseInfo.setUrl(page.getUrl().toString());
-        //把结果保存起来
-        page.putField("houseInfo",houseInfo);
     }
 
     private Site site = Site.me()
@@ -111,7 +125,7 @@ public class HouseProcessor implements PageProcessor {
             .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36")
             .setTimeOut(300*1000)//设置超时时间
             .setRetryTimes(3000)//设置重试的时间间隔
-            .setRetryTimes(3);//设置重试的次数
+            .setCycleRetryTimes(3);//设置重试的次数
     @Override
     public Site getSite() {
         return site;
@@ -119,24 +133,23 @@ public class HouseProcessor implements PageProcessor {
     //initialDelay:当任务启动后多久执行方法
     //fixedDelay:每隔多久执行方法
     //@Scheduled(initialDelay = 1000,fixedDelay = 100*1000)
-    //开启定时任务，每隔30秒爬一次
+    //开启定时任务，每隔5秒爬一次
     @Scheduled(cron = "*/5 * * * * *")
     public void process(){
-        HttpClientDownloader httpClientDownloader = null;
-        String ipList = kuiDaiLiIP.getIPList();
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        String ipList = kuaiDaiLiIP.getIPList();
         if (!ipList.isEmpty()){
             String[] split = ipList.split(":");
-            httpClientDownloader = new HttpClientDownloader();
             httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(
                     new Proxy(split[0],Integer.parseInt(split[1]))));
         }
 
-        Spider.create(new HouseProcessor())
+        Spider.create(this)
                 .addUrl(url)
                 .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(100000)))//设置布隆过滤器，对100000条数据进行去重
                 .thread(10)
                 .setDownloader(httpClientDownloader)
-                .addPipeline(this.houseDataPipeline)
+                .addPipeline(houseDataPipeline)
                 .run();
     }
 }

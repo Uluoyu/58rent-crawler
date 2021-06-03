@@ -2,8 +2,6 @@ package com.zhq.analysis.service;
 
 import com.zhq.crawler.pojo.HouseInfo;
 
-
-
 import java.util.HashMap;
 import java.util.List;
 

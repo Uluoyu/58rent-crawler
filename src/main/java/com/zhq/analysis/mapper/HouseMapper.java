@@ -20,7 +20,7 @@ public interface HouseMapper {
     public List<HashMap<String,String>> selectAnalysis2();
     //查询每个地区的平均租金
     public List<HashMap<String,String>> selectAnalysis3();
-
     //查询租房面积的分布区间
     public List<HashMap<String,String>> selectAnalysis4();
+
 }

@@ -19,7 +19,6 @@ public class HouseInfoServiceImpl implements HouseInfoService {
         //根据url来查询数据
         HouseInfo param = new HouseInfo();
         param.setUrl(houseInfo.getUrl());
-        //param.setTime(houseInfo.getTime());
         //执行查询
         List<HouseInfo> list = this.findHouseInfo(param);
         //判断查询结果是否为空

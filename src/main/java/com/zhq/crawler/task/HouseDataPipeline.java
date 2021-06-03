@@ -18,7 +18,7 @@ public class HouseDataPipeline implements Pipeline {
         HouseInfo houseInfo = resultItems.get("houseInfo");
         //判断数据是否不为空
         if (houseInfo != null){
-            this.houseInfoService.save(houseInfo);
+            houseInfoService.save(houseInfo);
         }
     }
 }

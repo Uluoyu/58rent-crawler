@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 @Component
-public class KuiDaiLiIP {
-
+public class KuaiDaiLiIP {
     public String getIPList(){
         //创建HttpClient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         //创建HttpGet对象，发起响应的地址
-        HttpGet httpGet = new HttpGet("http://dps.kdlapi.com/api/getdps/?orderid=941365731896247&num=1&pt=1&sep=1");
+        HttpGet httpGet = new HttpGet("http://dps.kdlapi.com/api/getdps/?orderid=932046070754723&num=1&pt=1&sep=1");
         //使用HttpClient对象，发起响应，获得response
         CloseableHttpResponse response = null;
         try {
@@ -44,5 +43,4 @@ public class KuiDaiLiIP {
         }
         return "获取IP失败";
     }
-
 }

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/data")
-//@CrossOrigin
 public class HouseController {
     @Autowired
     private HouseService houseService;
@@ -26,25 +25,21 @@ public class HouseController {
     }
     @GetMapping("/getAnaly")
     public String getAnData(@RequestParam("cate") String cate){
-        System.out.println("123456789");
         List<HashMap<String, String>> data = houseService.selectAnalysis(cate);
         return "{\n\"data\":" + JSON.toJSONString(data) +"\n}";
     }
     @GetMapping("/getAnaly2")
     public String getAnData2(){
-        System.out.println("123456789");
         List<HashMap<String, String>> data = houseService.selectAnalysis2();
         return "{\n\"data\":" + JSON.toJSONString(data) +"\n}";
     }
     @GetMapping("/getAnaly3")
     public String getAnData3(){
-        System.out.println("123456789");
         List<HashMap<String, String>> data = houseService.selectAnalysis3();
         return "{\n\"data\":" + JSON.toJSONString(data) +"\n}";
     }
     @GetMapping("/getAnaly4")
     public String getAnData4(){
-        System.out.println("123456789");
         List<HashMap<String, String>> data = houseService.selectAnalysis4();
         return "{\n\"data\":" + JSON.toJSONString(data) +"\n}";
     }
